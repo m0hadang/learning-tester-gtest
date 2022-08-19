@@ -1,0 +1,42 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "cmake generate",
+            "type": "shell",
+            "command": "cmake -B _build",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "problemMatcher": [],
+        },
+        {
+            "label": "build project",
+            "type": "shell",
+            "command": "cmake --build _build",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "run test",
+            "type": "shell",
+            "command": "${workspaceRoot}/_build/test/Tester --gtest_break_on_failure",
+            // "command": "${workspaceRoot}/build/test/Debug/Tester --gtest_break_on_failure", //ms
+            "options": {
+                "cwd": "${workspaceRoot}/_build/test/Debug/"
+            },
+            "problemMatcher": [],
+            "dependsOn": [
+                "build project"
+            ]
+        },
+    ]
+}
