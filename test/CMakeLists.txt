@@ -7,7 +7,11 @@ set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 14)
 
 set(Sources
-  test.cc
+  simple-test.cc
+  stub-test-double.cc
+  throw-test.cc
+  fixture-test.cc
+  parameter-test.cc
 )
 
 add_executable(${This} ${Sources})

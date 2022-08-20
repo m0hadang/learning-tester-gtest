@@ -25,7 +25,7 @@ TEST(EXPECT_TEST, fail_message) {
   EXPECT_EQ(2, 2) << "________if fail then show this message_______";
 }
 
-TEST(ASSERT_TEST, test_assert_keyword) {
+TEST(ASSERT_TEST, assert) {
   // if chnage keyword from EXPECT~ to ASSERT then stop
   // ASSERT_TRUE(false); stop here
   ASSERT_EQ("abc", "abc") << "s1 == s2";
