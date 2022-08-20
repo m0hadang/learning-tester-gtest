@@ -7,6 +7,8 @@ struct FixtureTest : public ::testing::Test {
   
   static void SetUpTestCase() {
     // it is called once
+    // prefare heavy job for test !!
+
     std::cout << "# SetUpTestCase" << std::endl;
   }
 
@@ -17,12 +19,14 @@ struct FixtureTest : public ::testing::Test {
 
   FixtureTest() {
     // it is called in every TEST_F
+
     std::cout << "## FixtureTest" << std::endl;
   }
 
   virtual void SetUp() override {
     // it is called in every TEST_F
-    // prefare for test
+    // prefare light job for test !!
+
     std::cout << "### SetUp" << std::endl;
     x = new int(10);
   }
@@ -30,6 +34,7 @@ struct FixtureTest : public ::testing::Test {
   virtual void TearDown() override {
     // it is called in every TEST_F
     // clear test leftover
+
     std::cout << "### TearDown" << std::endl;
     delete x;
   }  

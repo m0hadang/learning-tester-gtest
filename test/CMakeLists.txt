@@ -12,6 +12,7 @@ set(Sources
   throw-test.cc
   fixture-test.cc
   parameter-test.cc
+  timeout-test.cc
 )
 
 add_executable(${This} ${Sources})
