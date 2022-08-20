@@ -1,1 +1,1 @@
-cmake --build _build/ && _build/test/Tester
+cmake --build _build/ && _build/tester/Tester

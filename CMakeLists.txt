@@ -9,4 +9,4 @@ set(CMAKE_CXX_STANDARD 14)
 
 enable_testing()
 add_subdirectory(googletest)
-add_subdirectory(test)
+add_subdirectory(tester)
