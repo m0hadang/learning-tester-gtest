@@ -22,11 +22,11 @@ protected:
 class SECOND_TEST_2 : public TimeCriticalTest<2> {};
 class SECOND_TEST_3 : public TimeCriticalTest<3> {};
 
-//timeout test suite
-TEST_F(SECOND_TEST_2, Sample) { 
-  std::this_thread::sleep_for(std::chrono::seconds(1));
-}
+// //timeout test suite
+// TEST_F(SECOND_TEST_2, Sample) { 
+//   std::this_thread::sleep_for(std::chrono::seconds(1));
+// }
 
-TEST_F(SECOND_TEST_3, Sample) { 
-  std::this_thread::sleep_for(std::chrono::seconds(2));
-}
+// TEST_F(SECOND_TEST_3, Sample) { 
+//   std::this_thread::sleep_for(std::chrono::seconds(2));
+// }

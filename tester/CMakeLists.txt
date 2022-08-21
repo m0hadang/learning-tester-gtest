@@ -20,9 +20,16 @@ set(Sources
   double/dumy.cc
   double/fake.cc
   double/spy.cc
+  mock/on-call.cc
+  mock/expect-call.cc
 )
 
 add_executable(${This} ${Sources})
+
+# if(MSVC)
+#   set_property(TARGET ${This} PROPERTY
+#               MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+# endif()
 
 target_link_libraries(${This} PUBLIC
   gtest_main
