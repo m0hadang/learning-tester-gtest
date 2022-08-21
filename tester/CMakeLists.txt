@@ -22,6 +22,7 @@ set(Sources
   double/spy.cc
   mock/on-call.cc
   mock/expect-call.cc
+  mock/return-ref.cc
 )
 
 add_executable(${This} ${Sources})
