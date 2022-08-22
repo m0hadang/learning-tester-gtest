@@ -24,6 +24,7 @@ set(Sources
   mock/expect-call.cc
   mock/return-ref.cc
   mock/out-param.cc
+  mock/set-default-value.cc
 )
 
 add_executable(${This} ${Sources})

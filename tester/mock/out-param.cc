@@ -3,13 +3,13 @@
 #include <iostream>
 #include <string>
 
-class NetDriver {
+class INetDriver {
 public:
   virtual void get_error(int& err) const = 0;
   virtual bool get_spec(std::vector<int>& v, int& id) = 0;
 };
 
-class MockNetDriver : public NetDriver {
+class MockNetDriver : public INetDriver {
 public:
   MOCK_CONST_METHOD1(get_error, void(int&));
   MOCK_METHOD2(get_spec, bool(std::vector<int>&, int&));
