@@ -27,6 +27,7 @@ set(Sources
   mock/set-default-value.cc
   mock/invoke.cc
   mock/protect-unexpected-call.cc
+  mock/overload.cc
 )
 
 add_executable(${This} ${Sources})
