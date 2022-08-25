@@ -2,13 +2,14 @@
 #include <gmock/gmock.h>
 #include <iostream>
 
-class IOver {
+class IOverLoad {
+public:  
   virtual int sum(int a, int b) = 0;
   virtual int sum(int a, int b, int c) = 0;
   virtual int not_overload(int a, int b, int c) = 0;
 };
 
-class MockOver : public IOver {
+class MockOverLoad : public IOverLoad {
 public:
   MOCK_METHOD(int, sum, (int a, int b), (override));
   MOCK_METHOD(int, sum, (int a, int b, int c), (override));
@@ -16,7 +17,7 @@ public:
 };
 
 TEST(GMOCK_OVERLOAD_TEST, sum) {
-  MockOver mock;
+  MockOverLoad mock;
 
   EXPECT_CALL(mock, sum(1, 4))
     .WillOnce(::testing::Return(5));
