@@ -109,8 +109,41 @@ TEST(GMOCK_EXPECT_CALL_TEST, move_with_any_argument) {
   MockUnit mock;
   EXPECT_CALL(mock, move(_, _))// just use any argument
     .Times(3);
+  // EXPECT_CALL(mock, move)// or use this
+  //   .Times(3);
 
   mock.move(10, 20);
   mock.move(1, 5);
   mock.move(3, 6);
+}
+
+// Argument Condition
+TEST(GMOCK_EXPECT_CALL_TEST, move_with_ge) {
+  using ::testing::_;
+
+  MockUnit mock;
+  EXPECT_CALL(mock, move(::testing::Ge(2), _))// just use any argument
+    .Times(3);
+
+  // mock.move(1, 20);
+  mock.move(4, 20);
+  mock.move(2, 5);
+  mock.move(3, 6);
+}
+
+// Duplicate EXPECT_CALL
+TEST(GMOCK_EXPECT_CALL_TEST, duplicate_get_y) {
+
+  return;
+
+  //fail test
+
+  MockUnit mock;
+  EXPECT_CALL(mock, get_y()) // duplicate get_y()
+    .WillOnce(::testing::Return(20));
+  EXPECT_CALL(mock, get_y()) // duplicate get_y()
+    .WillOnce(::testing::Return(10));// #1
+
+  EXPECT_EQ(mock.get_y(), 10);// match #1
+  EXPECT_EQ(mock.get_y(), 20);// match #1, test fail, because #1 is over(second call)
 }
