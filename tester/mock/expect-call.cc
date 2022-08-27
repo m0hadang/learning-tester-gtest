@@ -131,8 +131,8 @@ TEST(GMOCK_EXPECT_CALL_TEST, move_with_ge) {
   mock.move(3, 6);
 }
 
-// Duplicate EXPECT_CALL
-TEST(GMOCK_EXPECT_CALL_TEST, duplicate_get_y) {
+// Duplicate EXPECT_CALL fail
+TEST(GMOCK_EXPECT_CALL_TEST, duplicate_fail_get_y) {
 
   return;
 
@@ -146,4 +146,18 @@ TEST(GMOCK_EXPECT_CALL_TEST, duplicate_get_y) {
 
   EXPECT_EQ(mock.get_y(), 10);// match #1
   EXPECT_EQ(mock.get_y(), 20);// match #1, test fail, because #1 is over(second call)
+}
+
+// Duplicate EXPECT_CALL success
+TEST(GMOCK_EXPECT_CALL_TEST, duplicate_success_get_y) {
+  MockUnit mock;
+  EXPECT_CALL(mock, get_y()) // duplicate get_y()
+    .WillOnce(::testing::Return(20))
+    .RetiresOnSaturation();// #2
+  EXPECT_CALL(mock, get_y()) // duplicate get_y()
+    .WillOnce(::testing::Return(10))
+    .RetiresOnSaturation();// #1
+
+  EXPECT_EQ(mock.get_y(), 10);// match #1, #1 is disabled
+  EXPECT_EQ(mock.get_y(), 20);// match #2
 }
