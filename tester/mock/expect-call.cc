@@ -122,7 +122,7 @@ TEST(GMOCK_EXPECT_CALL_TEST, move_with_ge) {
   using ::testing::_;
 
   MockUnit mock;
-  EXPECT_CALL(mock, move(::testing::Ge(2), _))// just use any argument
+  EXPECT_CALL(mock, move(::testing::Ge(2), _))// just use any argument, Ge is matcher
     .Times(3);
 
   // mock.move(1, 20);
