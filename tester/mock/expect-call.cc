@@ -161,3 +161,50 @@ TEST(GMOCK_EXPECT_CALL_TEST, duplicate_success_get_y) {
   EXPECT_EQ(mock.get_y(), 10);// match #1, #1 is disabled
   EXPECT_EQ(mock.get_y(), 20);// match #2
 }
+
+TEST(GMOCK_EXPECT_CALL_TEST, for_fail_get_y) {
+  
+  return;
+
+  //fail test
+
+  MockUnit mock;
+  for (int i = 3; i > 0; i--) {
+    EXPECT_CALL(mock, get_y())
+      .WillOnce(::testing::Return(10 * i));
+  }
+
+  EXPECT_EQ(mock.get_y(), 10);// ::testing::Return(10)
+  EXPECT_EQ(mock.get_y(), 20);// ::testing::Return(10), test fail, because #1 is over(second call)
+  EXPECT_EQ(mock.get_y(), 30);// 
+}
+
+TEST(GMOCK_EXPECT_CALL_TEST, for_success1_get_y) {
+  
+  MockUnit mock;
+  for (int i = 3; i > 0; i--) {
+    EXPECT_CALL(mock, get_y())
+      .WillOnce(::testing::Return(10 * i))
+      .RetiresOnSaturation();//if over then disable
+  }
+
+  EXPECT_EQ(mock.get_y(), 10);
+  EXPECT_EQ(mock.get_y(), 20);
+  EXPECT_EQ(mock.get_y(), 30);
+}
+
+TEST(GMOCK_EXPECT_CALL_TEST, for_success2_get_y) {
+
+  MockUnit mock;
+
+  ::testing::InSequence s;// do not need reverse for
+  for (int i = 1; i <= 3; i++) {
+    EXPECT_CALL(mock, get_y())
+      .WillOnce(::testing::Return(10 * i))
+      .RetiresOnSaturation();
+  }
+
+  EXPECT_EQ(mock.get_y(), 10);
+  EXPECT_EQ(mock.get_y(), 20);
+  EXPECT_EQ(mock.get_y(), 30);
+}
