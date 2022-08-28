@@ -25,6 +25,13 @@ public:
   // MOCK_METHOD(void, move, (int, int), (override));
   MOCK_CONST_METHOD0(get_y, int());
   // MOCK_METHOD(int, get_y, (), (const, override));
+
+
+  // Won't compile!
+  // unprotected commas std::map<std::string, int>
+  // should wrap '()'
+  // MOCK_METHOD(void, do_container, (const std::map<std::string, int>& a, bool b), ()); 
+  MOCK_METHOD(void, do_container, ((const std::map<std::string, int>& a), bool b), ());
 };
 
 

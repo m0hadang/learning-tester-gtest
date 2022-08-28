@@ -30,4 +30,5 @@ TEST(ASSERT_TEST, assert) {
   // ASSERT_TRUE(false); stop here
   ASSERT_EQ("abc", "abc") << "s1 == s2";
   ASSERT_STREQ("abc", "abc");
+  // ASSERT_THAT()
 }

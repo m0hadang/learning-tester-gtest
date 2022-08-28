@@ -28,7 +28,8 @@ set(Sources
   mock/invoke.cc
   mock/protect-unexpected-call.cc
   mock/overload.cc
-  mock/matcher.cc
+  mock/matcher1.cc
+  mock/matcher2.cc
 )
 
 add_executable(${This} ${Sources})

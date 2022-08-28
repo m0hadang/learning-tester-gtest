@@ -2,6 +2,8 @@
 #include <gmock/gmock.h>
 #include <iostream>
 #include <string>
+#include <vector>
+#include <map>
 
 class BaseDoDumy {
 public:
@@ -31,6 +33,8 @@ public:
   MOCK_METHOD(void, do_three, (int a, int b, int c), ());
   MOCK_METHOD(void, do_string, (std::string a), ());
   MOCK_METHOD(void, do_casting, (DerrivedDoDumy* a), ());
+  MOCK_METHOD(void, do_container, (const std::vector<int>& a), ());
+  MOCK_METHOD(void, do_container2, ((const std::map<std::string, int>& a)), ());
 };
 
 /*
@@ -100,7 +104,7 @@ TEST(GMOCK_MATCHER_TEST, do_this_some) {
   // mock.do_that("**blah**", NULL); // fail\]
 }
 
-//pointee
+// pointee
 TEST(GMOCK_MATCHER_TEST, pointee) {
   MockDoSomething mock;
   EXPECT_CALL(mock, 
@@ -149,7 +153,7 @@ TEST(GMOCK_MATCHER_TEST, casting) {
   mock.do_casting(derrived);
 }
 
-//you can use overload mock method by using matcher
+// you can use overload mock method by using matcher
 TEST(GMOCK_MATCHER_TEST, overload) {
   MockDoSomething mock;
   EXPECT_CALL(mock, print(::testing::An<int>()));
@@ -161,7 +165,7 @@ TEST(GMOCK_MATCHER_TEST, overload) {
   mock.print('a');
 }
 
-//select action by input argument
+// select action by input argument
 TEST(GMOCK_MATCHER_TEST, select_action_by_arg) {
   MockDoSomething mock;
 
@@ -177,7 +181,7 @@ TEST(GMOCK_MATCHER_TEST, select_action_by_arg) {
   EXPECT_EQ(mock.do_this(3), 'a');
 }
 
-//compare args
+// compare args
 TEST(GMOCK_MATCHER_TEST, compare_args) {
   using ::testing::AllOf;
   using ::testing::Args;
@@ -212,7 +216,7 @@ TEST(GMOCK_MATCHER_TEST, compare_args) {
   mock.do_two(0, 1);// #2
 }
 
-//predicate
+// predicate
 int is_even(int n) { 
   return (n % 2) == 0 ? 1 : 0; 
 }
@@ -220,11 +224,11 @@ TEST(GMOCK_MATCHER_TEST, predicate) {
   std::vector<int> v{1,2,3,4,5};
   const int count = 
     std::count_if(v.begin(), v.end(), 
-      ::testing::Matches(::testing::Ge(3)));//you use matcher in stl, it is predicate
+      ::testing::Matches(::testing::Ge(3)));// you use matcher in stl, it is predicate
   
-  //should wrap 'Truly'
-  //A predicate does not necessarily return a bool. 
-  //If the return value can be used in if (condition) it can be used
+  // should wrap 'Truly'
+  // A predicate does not necessarily return a bool. 
+  // If the return value can be used in if (condition) it can be used
   MockDoSomething mock;
   EXPECT_CALL(mock, do_this(::testing::Truly(is_even)));
 
@@ -232,7 +236,7 @@ TEST(GMOCK_MATCHER_TEST, predicate) {
   mock.do_this(2);
 }
 
-//refrence
+// refrence
 TEST(GMOCK_MATCHER_TEST, refrence) {
   MockDoSomething mock;
   std::string str1 = "abc";
@@ -246,4 +250,67 @@ TEST(GMOCK_MATCHER_TEST, refrence) {
 
   std::string str2 = "bcd";
   mock.do_string(str2);
+}
+
+/*
+ * if STL iterator is implemented, it can be used without STL container
+ * ElementsAre*() can be nested
+ * if you are using a pointer instead of a reference, use Pointee(ElementsAre*(...))
+ * the order of elements in ElementsAre*() is important
+ * if the element is unsorted (hash_map), you must wrap the ElementsAre with WhenSorted
+ */
+TEST(EXPECT_TEST, elements_are) {
+
+  std::vector<int> x{2,1,3};
+  EXPECT_THAT(x, ::testing::ElementsAre(2, 1, 3));
+  // EXPECT_EQ(x[0], 2) << "Vectors x and y differ at index " << 0;
+  // EXPECT_EQ(x[1], 1) << "Vectors x and y differ at index " << 1;
+  // EXPECT_EQ(x[2], 3) << "Vectors x and y differ at index " << 2;
+
+  std::map<std::string, int> m = {{"a", 1}, {"b", 2}, {"c", 3}};
+  EXPECT_THAT(m, 
+    ::testing::ElementsAre(
+      ::testing::Pair("a", 1), 
+      ::testing::Pair("b", 2), 
+      ::testing::Pair("c", 3)));
+
+  // //checks that in vector v all the elements are greater than 10 and less than 20
+  // ASSERT_THAT(v, Each(AllOf(Gt(10), Lt(20))));
+
+  // //checks that vector v consist of 
+  // //   5, number greater than 10, anything.
+  // ASSERT_THAT(v, ElementsAre(5, Gt(10), _));  
+}
+
+// container
+TEST(GMOCK_MATCHER_TEST, container1) {
+  MockDoSomething mock;
+  EXPECT_CALL(
+    mock, 
+    do_container(
+      ::testing::ElementsAre(1, ::testing::Gt(0), ::testing::_, 5)));  
+      // ::testing::UnorderedElementsAre()
+
+  std::vector<int> v{
+    1, // 1
+    2, // ::testing::Gt(0)
+    -1,// ::testing::_
+    5  // 5
+  };
+  mock.do_container(v);
+}
+
+TEST(GMOCK_MATCHER_TEST, container2) {
+  MockDoSomething mock;
+  // ElementsAreArray accepts an array of element values.
+  const int expected_vector1[] = {1, 5, 2, 4};
+  EXPECT_CALL(mock, do_container(::testing::ElementsAreArray(expected_vector1)));//vector but can use array
+  // Or, an array of element matchers.
+  ::testing::Matcher<int> expected_vector2[] = {1, ::testing::Gt(2), ::testing::_, 3};
+  EXPECT_CALL(mock, do_container(::testing::ElementsAreArray(expected_vector2)));
+
+  std::vector<int> v1{ 1, 5, 2, 4 };
+  mock.do_container(v1);
+  std::vector<int> v2{ 1, 3, 0, 3 };
+  mock.do_container(v2);
 }
