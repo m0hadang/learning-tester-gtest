@@ -1,1 +1,3 @@
-cmake --build _build/ && _build/tester/Tester
+# --gmock_verbose=info
+#   : show detail abount gmock invoke
+cmake --build _build/ && _build/tester/Tester --gmock_verbose=info
