@@ -30,6 +30,7 @@ set(Sources
   mock/overload.cc
   mock/matcher1.cc
   mock/matcher2.cc
+  mock/delegate-call.cc
 )
 
 add_executable(${This} ${Sources})
