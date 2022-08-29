@@ -32,6 +32,7 @@ set(Sources
   mock/matcher2.cc
   mock/delegate-call.cc
   mock/destructor-call.cc
+  mock/parent-call.cc
 )
 
 add_executable(${This} ${Sources})
